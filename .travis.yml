@@ -4,6 +4,7 @@ language: R
 sudo: false
 cache: packages
 
+
 #before_script
 before_script:
 - R -q -e 'devtools::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
@@ -12,7 +13,7 @@ before_script:
 after_success:
 - R -q -e 'tic::after_success()'
 
-#deploy
+#deploy // https://github.com/travis-ci/travis-build/blob/85ef7108/lib/travis/build/addons/deploy/script.rb#L100-L107
 deploy:
   provider: script
   script: R -q -e 'tic::deploy()'
