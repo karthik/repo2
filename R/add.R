@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' gadd(1,2)
+#' gadd(1,4)
 #' # This is some garbage notes!
 gadd <- function(x,y) {
   x + y
