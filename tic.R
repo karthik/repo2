@@ -1,15 +1,14 @@
 
-#before_script
-before_script:
-  - R -q -e 'devtools::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
+get_stage("after_success") % >%
+  add_step(step_hello_world()) % >%
+  add_step(step_run_covr())
 
-#after_success
-after_success:
-  - R -q -e 'tic::after_success()'
+get_stage("deploy") % >%
+  add_step(step_install_ssh_keys()) % >%
+  add_step(step_test_ssh())
 
-#deploy
-deploy:
-  provider: script
-script: R -q -e 'tic::deploy()'
-on:
-  all_branches: true
+if  (ci()$get_branch()==  "production"  &&  Sys.getenv("BUILD_PKGDOWN")!=  "") {
+  get_stage("deploy") % >%
+    add_step(step_build_pkgdown()) % >%
+    add_step(step_push_deploy(path  =  "docs",branch  =  "gh-pages"))
+}
